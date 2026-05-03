@@ -1,11 +1,17 @@
 // 모든 이미지에 공통으로 적용할 의료 블로그 통일 스타일
+// ✅ 이미지 스타일 통일: 평면 일러스트 스타일 고정 (스타일 혼재 방지)
 const IMG_BASE_STYLE =
-  'medical blog illustration style, soft blue and white color palette, professional healthcare aesthetic, modern clean minimalist design, no text in image, high quality vector art, suitable for Korean healthcare blog';
+  'flat vector illustration style, soft teal and white color palette, professional healthcare aesthetic, modern clean minimalist design, consistent illustration style throughout, no text in image, high quality vector art, suitable for Korean healthcare blog';
 
 export function buildPrompt({ topic, category, emphasis, targetAudience, clinicName, doctorName }) {
-  const clinic = clinicName?.trim() || '[의원명]';
-  const doctor = doctorName?.trim() || '[원장명]';
+  const clinic = clinicName?.trim() || '';
+  const doctor = doctorName?.trim() || '';
   const audience = targetAudience?.trim() || '30~60대 일반 성인';
+
+  // ✅ 개원 전/후 CTA 분기
+  const ctaInstruction = clinic && doctor
+    ? `마무리 문단: "${doctor}"의 임상 경험을 자연스럽게 녹인 신뢰 기반 문장으로 마무리. 예) "○○○과에서 매일 환자를 진료하는 의사로서, 이 질환은 조기에 발견할수록 치료 결과가 좋습니다." 이후 ${clinic} 방문을 부드럽게 권유하는 1~2문장 추가. 절대 "주저하지 마시고" "늘 함께하겠습니다" 같은 광고성 표현 금지.`
+    : `마무리 문단: 의사의 임상 현장 경험을 담은 신뢰 기반 문장으로 마무리. 예) "검진 현장에서 매일 환자를 보는 의사로서, 이 질환은 조기에 발견할수록 치료 결과가 훨씬 좋습니다." 개원 준비 중이므로 특정 의원 홍보 문구는 작성하지 말 것.`;
 
   return `당신은 한국의 1차 진료 의원을 위한 환자 친화적 의료 블로그 전문 작가입니다.
 의학 지식이 없는 일반 환자들이 쉽게 이해할 수 있는 따뜻하고 신뢰감 있는 글을 씁니다.
@@ -16,8 +22,8 @@ export function buildPrompt({ topic, category, emphasis, targetAudience, clinicN
 - 진료 분야: ${category}
 - 강조 포인트: ${emphasis}
 - 타깃 독자: ${audience}
-- 의원명: ${clinic}
-- 원장명: ${doctor}
+${clinic ? `- 의원명: ${clinic}` : ''}
+${doctor ? `- 원장명: ${doctor}` : ''}
 
 ## 출력 형식 (아래 구분자를 정확히 지켜주세요)
 
@@ -33,16 +39,50 @@ export function buildPrompt({ topic, category, emphasis, targetAudience, clinicN
 ===CONTENT===
 [아래 규칙에 따라 2,500~3,000자 분량 본문 작성]
 
-본문 작성 규칙:
-1. 도입부: 독자가 실제로 겪을 법한 상황으로 공감형 시작
-   예) "최근 건강검진 결과지를 받아들고 당황하신 적 있으신가요?"
-2. 소제목: **이모지 소제목** 형식 사용 (줄 전체를 볼드로)
-   예) **🔍 고혈압이란 무엇일까요?**
-3. 섹션 구성: 4~5개 섹션 (원인·증상·진단·치료·예방 중 주제에 맞게 선택)
-4. 어조: 친절한 동네 의사가 환자에게 직접 설명하는 느낌
-5. 의학 용어: 반드시 쉬운 말로 풀어서 설명 (전문 용어 뒤 괄호로 부연)
-6. 마무리: ${clinic} ${doctor}을(를) 자연스럽게 언급하는 PR 문단으로 마무리
-7. 이미지 삽입: 본문 내 적절한 위치 3~4곳에 아래 형식으로 삽입
+## 본문 작성 규칙
+
+### ✅ 문단 호흡 (가장 중요)
+- 한 문단은 반드시 3~4줄(약 60~80자) 이내로 끊을 것
+- 문단과 문단 사이에는 반드시 빈 줄 한 줄 추가
+- 모바일에서 스크롤 시 시각적으로 편안하게 읽힐 것
+- 절대 5줄 이상 연속된 단락 금지
+
+### ✅ 도입부
+- 독자가 실제로 겪을 법한 일상 장면으로 공감형 시작
+- 예) "바쁜 업무에 치여 점심은 대충 때우고, 밤늦게 배달 음식을 시켜 먹는 당신."
+- 공포감 조성 표현(암, 사망, 심각한 합병증 등) 도입부에 절대 사용 금지
+  → 합병증/심각한 결과는 반드시 별도 섹션("방치하면 어떻게 되나요?")에서만 언급
+
+### ✅ 소제목 형식
+- **이모지 소제목** 형식 사용 (줄 전체를 볼드로)
+- 예) **🔍 고혈압이란 무엇일까요?**
+
+### ✅ 섹션 구성 (4~5개)
+- 원인·증상·진단·치료·예방·방치 시 결과 중 주제에 맞게 선택
+
+### ✅ 증상 나열 규칙
+- 증상이 많아도 절대 7개 이상 나열 금지
+- 반드시 아래 구조로 구성:
+  [ 가장 흔한 증상 3가지 ] — 번호 + 이름(영문) + 2~3줄 설명
+  [ 놓치기 쉬운 신호 2가지 ] — 일반인이 다른 질환으로 오해하기 쉬운 증상 위주
+
+### ✅ 어조
+- 친절한 동네 의사가 환자에게 직접 설명하는 느낌
+- 딱딱한 교과서체 금지 / 광고성 표현 금지
+
+### ✅ 의학 용어 처리
+- 반드시 쉬운 말로 풀어서 설명
+- 전문 용어는 쉬운 설명 뒤 괄호로 짧게 병기
+- 긴 영문 의학 용어(15자 이상) 단독 노출 금지 (예: Esophagogastroduodenoscopy 금지)
+- Heartburn, GERD처럼 짧고 익숙한 용어만 병기 허용
+
+### ✅ 마무리 CTA
+- ${ctaInstruction}
+
+### ✅ 이미지 삽입 (3~4곳)
+- 본문 내 적절한 위치에 아래 형식으로 삽입
+- 이미지 스타일은 반드시 평면 벡터 일러스트(flat vector)로 통일
+- 사실적 사진(realistic photo), 메디컬 해부도(medical anatomy), 실사 스타일 혼용 금지
 
 [이미지 삽입 형식 — 정확히 이 구분자를 사용]
 ~~~IMAGE~~~
