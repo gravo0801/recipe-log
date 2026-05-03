@@ -1,5 +1,5 @@
 const GEMINI_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 export async function generateBlogPost(apiKey, prompt) {
   const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
