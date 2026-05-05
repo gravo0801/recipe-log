@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import BlogGenerator from './pages/BlogGenerator';
 import TopicLibrary from './pages/TopicLibrary';
+import SavedPosts from './pages/SavedPosts';
 import Settings from './pages/Settings';
 import './index.css';
 
@@ -12,6 +13,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<BlogGenerator />} />
           <Route path="/library" element={<TopicLibrary />} />
+          <Route path="/saved" element={<SavedPosts />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>
