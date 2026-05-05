@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { Stethoscope, Sparkles, BookOpen, Settings } from 'lucide-react';
+import { Stethoscope, Sparkles, BookOpen, BookMarked, Settings } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: Sparkles, label: '글 생성' },
   { to: '/library', icon: BookOpen, label: '주제 라이브러리' },
+  { to: '/saved', icon: BookMarked, label: '저장된 글' },
 ];
 
 export default function Layout({ children }) {
