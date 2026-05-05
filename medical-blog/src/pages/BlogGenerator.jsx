@@ -269,6 +269,16 @@ export default function BlogGenerator() {
       const entry = { id: Date.now().toString(), ...form, seoTitle: parsed.title, createdAt: new Date().toISOString() };
       localStorage.setItem('topicLibrary', JSON.stringify([entry, ...lib].slice(0, 50)));
 
+      // ✅ 추가: 생성된 글 전체 저장 (최대 30개)
+      const savedLib = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+      const savedEntry = {
+        id: Date.now().toString(),
+        ...form,
+        createdAt: new Date().toISOString(),
+        generated: parsed,
+      };
+      localStorage.setItem('savedPosts', JSON.stringify([savedEntry, ...savedLib].slice(0, 30)));
+
       // SEO 제목 5개 별도 생성 (비동기, 실패해도 무관)
       setTitlesLoading(true);
       generateSeoTitles(settings.geminiApiKey, form)
