@@ -1,38 +1,32 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ChefHat, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-              <ChefHat className="w-8 h-8 text-primary-500" />
-              <span className="text-xl font-bold text-gray-900 hidden sm:inline">
-                나의 레시피
-              </span>
+    <div className="min-h-screen bg-paper text-ink">
+      {/* Slim editorial header — masthead lives in Home.jsx itself */}
+      <header className="bg-paper sticky top-0 z-50 border-b border-rule">
+        <div className="max-w-3xl mx-auto px-5 sm:px-6">
+          <div className="flex items-center justify-between h-14">
+            <Link to="/" className="font-serif italic text-lg tracking-tight hover:text-accent transition-colors">
+              나의 레시피
             </Link>
-
-            {/* Add Recipe Button */}
             <button
               onClick={() => navigate('/recipe/new')}
-              className="btn-primary flex items-center space-x-2"
+              className="btn-primary flex items-center gap-1.5"
             >
-              <Plus className="w-5 h-5" />
-              <span className="hidden sm:inline">레시피 추가</span>
-              <span className="sm:hidden">추가</span>
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">새 레시피</span>
+              <span className="sm:hidden">기록</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Constrained reading column — magazine-style */}
+      <main className="max-w-3xl mx-auto px-5 sm:px-6 pt-6 pb-12">
         {children}
       </main>
     </div>
